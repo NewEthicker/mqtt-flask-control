@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # MQTT Broker Configuration (WebSocket)
 broker = "test.mosquitto.org"
-port = 443  # WebSocket port
+port = 443
 topic = "/test/quecpython"
 client_id = "flask_server_client"
 
@@ -26,7 +26,7 @@ mqtt_client.on_connect = on_connect
 # Connect to MQTT Broker
 try:
     mqtt_client.connect(broker, port, keepalive=60)
-    mqtt_client.loop_start()  # Start MQTT loop in background
+    mqtt_client.loop_start()
 except Exception as e:
     print(f"Failed to connect to MQTT broker: {e}")
     raise
@@ -48,5 +48,5 @@ def toggle():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=8080)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
