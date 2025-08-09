@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT On/Off Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+        }
+        #toggleButton {
+            padding: 20px 40px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        #toggleButton.off {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MQTT On/Off Control</h1>
+        <button id="toggleButton" class="{{ 'off' if state == 'OFF' else '' }}">{{ state }}</button>
+    </div>
+    <script>
+        const button = document.getElementById('toggleButton');
+        button.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/toggle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+                if (data.state) {
+                    button.textContent = data.state;
+                    button.className = data.state === 'OFF' ? 'off' : '';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Request failed: ' + error);
+            }
+        });
+    </script>
+</body>
+</html>
