@@ -4,21 +4,19 @@ import json
 
 app = Flask(__name__)
 
-# MQTT Broker Configuration (WebSocket with TLS)
+# MQTT Broker Configuration (TCP)
 broker = "broker.hivemq.com"
-port = 8883  # WebSocket port with TLS
+port = 1883  # TCP port, no WebSocket
 topic = "/test/quecpython"
 client_id = "flask_server_client"
 
-# Initialize MQTT Client with WebSocket transport
-mqtt_client = mqtt.Client(client_id=client_id, transport="websockets")
-mqtt_client.ws_set_options(path="/mqtt")  # HiveMQ WebSocket path
-mqtt_client.tls_set()  # Enable TLS for secure WebSocket connection
+# Initialize MQTT Client (default transport is TCP)
+mqtt_client = mqtt.Client(client_id=client_id)
 
 # MQTT Callbacks
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("Connected to MQTT broker via WebSocket")
+        print("Connected to MQTT broker via TCP")
     else:
         print(f"Connection failed with code {rc}")
 
